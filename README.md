@@ -6,4 +6,7 @@ This requires Vagrant, Ansible and Virtual Box
 Run it by doing:
 
 vagrant up
+
 vagrant provision
+
+vagrant ssh
