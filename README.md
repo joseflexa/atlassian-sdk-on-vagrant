@@ -10,3 +10,5 @@ vagrant up
 vagrant provision
 
 vagrant ssh
+
+See help with command: vagrant help
