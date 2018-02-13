@@ -17,3 +17,12 @@ Vagrant automatically shares the directory where this file is hosted as /vagrant
 vagrant ssh
 ls /vagrant
 ```
+Maven may have issues to authorize maven.atlassian.com, so you will need to import the certificate into java keystore:
+```bash
+openssl s_client -connect maven.atlassian.com:443 < /dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > public.crt
+keytool -import -alias maven.atlassian.com -keystore /etc/ssl/certs/java/cacerts -file ./public.crt
+```
+You can verify if the certificate was imported correctly by using https://github.com/MichalHecko/SSLPoke
+```bash
+java -Djavax.net.ssl.trustStore=/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/cacerts SSLPoke maven.atlassian.com 443
+```
