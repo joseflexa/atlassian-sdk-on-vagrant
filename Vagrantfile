@@ -1,3 +1,5 @@
+Vagrant::DEFAULT_SERVER_URL.replace('https://vagrantcloud.com')
+
 VAGRANTFILE_API_VERSION = "2"
 
 proxy = ENV['http_proxy'] || ""
