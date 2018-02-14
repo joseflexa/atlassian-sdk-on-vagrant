@@ -2,23 +2,29 @@
   become: yes
   become_method: sudo
   tasks:
-  - name: update
-    apt: upgrade=yes
-    environment: proxy_env
-  - name: install jdk repo
-    apt_repository: repo='ppa:openjdk-r/ppa'
-    environment: proxy_env
-  - name: install openjdk
-    apt: name=openjdk-8-jdk state=present 
-    environment: proxy_env
+  - name: add repo for java 8
+    apt_repository: repo='ppa:webupd8team/java' state=present
+    environment: '{{proxy_env}}'
+  - name: set licence selected
+    shell: /bin/echo debconf shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
+    environment: '{{proxy_env}}'
+  - name: set licence seen
+    shell: /bin/echo debconf shared/accepted-oracle-license-v1-1 seen true | /usr/bin/debconf-set-selections
+    environment: '{{proxy_env}}'
+  - name: install java 8
+    apt: name=oracle-java8-installer state=latest update-cache=yes force=yes
+    ignore_errors: True
+    environment: '{{proxy_env}}'
   - name: apt over https
     apt: name=apt-transport-https
-    environment: proxy_env
+    environment: '{{proxy_env}}'
   - name: atlassian apt key
     apt_key: keyserver=keyserver.ubuntu.com id=B07804338C015B73
-  - name: install atlassian repo
-    apt_repository: repo='deb https://sdkrepo.atlassian.com/debian/ stable contrib'
-    environment: proxy_env
+  - name: get atlassian sdk
+    shell: curl https://sdkrepo.atlassian.com/debian/pool/contrib/a/atlassian-plugin-sdk/atlassian-plugin-sdk_6.2.11_all.deb -o atlassian-plugin-sdk_6.2.11_all.deb
+    environment: '{{proxy_env}}'
+    ignore_errors: True
   - name: install atlassian sdk
-    apt: name=atlassian-plugin-sdk update_cache=yes
-    environment: proxy_env
+    shell: dpkg -i atlassian-plugin-sdk_6.2.11_all.deb
+    environment: '{{proxy_env}}'
+    ignore_errors: True
