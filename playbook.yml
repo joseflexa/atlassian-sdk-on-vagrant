@@ -28,3 +28,20 @@
     shell: dpkg -i atlassian-plugin-sdk_6.2.11_all.deb
     environment: '{{proxy_env}}'
     ignore_errors: True
+  - name: install xinit
+    apt: name=xinit
+    environment: '{{proxy_env}}'
+  - name: install x11 server utils
+    apt: name=x11-xserver-utils
+    environment: '{{proxy_env}}'
+    ignore_errors: True
+  - name: xhost +
+    shell: xhost +
+    environment: '{{proxy_env}}'
+    ignore_errors: True
+  - name: get intellij
+    shell: wget https://download.jetbrains.com/idea/ideaIC-2017.3.4-no-jdk.tar.gz
+    environment: '{{proxy_env}}'
+  - name: install intellij
+    shell: tar xzf ideaIC-2017.3.4-no-jdk.tar.gz
+    environment: '{{proxy_env}}'
